@@ -6,33 +6,46 @@ botaoAdicionar.addEventListener("click", function(event){
 
     var form = document.querySelector("#form-adiciona");
 
-    var nome = form.nome.value;
-    var peso = form.peso.value;
-    var altura = form.altura.value;
-    var gordura = form.gordura.value;
+    var paciente = obtemPacienteDoFormulario(form);
 
-    var pacienteTr = document.createElement("tr");
-
-    var nomeTr = document.createElement("td");
-    var pesoTr = document.createElement("td");
-    var alturaTr = document.createElement("td");
-    var gorduraTr = document.createElement("td");
-    var imcTr = document.createElement("td");
-
-    nomeTr.textContent = nome;
-    pesoTr.textContent = peso;
-    alturaTr.textContent = altura;
-    gorduraTr.textContent = gordura;
-    imcTr.textContent = calculaImc(peso, altura);
-
-    pacienteTr.appendChild(nomeTr);
-    pacienteTr.appendChild(pesoTr);
-    pacienteTr.appendChild(alturaTr);
-    pacienteTr.appendChild(gorduraTr);
-    pacienteTr.appendChild(imcTr);  
-
-
+    var pacienteTr = montaTr(paciente);
+ 
     var tabela = document.querySelector("#tabela-pacientes");
 
     tabela.appendChild(pacienteTr);
+
+    form.reset();
 });
+
+function montaTr(paciente) {
+    var pacienteTr = document.createElement("tr");
+    pacienteTr.classList.add("paciente");
+
+    pacienteTr.appendChild(montaTd(paciente.nome, "info-nome"));
+    pacienteTr.appendChild(montaTd(paciente.peso, "info-peso"));
+    pacienteTr.appendChild(montaTd(paciente.altura, "info-altura"));
+    pacienteTr.appendChild(montaTd(paciente.gordura, "info-gordura"));
+    pacienteTr.appendChild(montaTd(paciente.imc, "info-imc"));
+
+    return pacienteTr;
+}
+
+function montaTd(dado,classe){
+    var td = document.createElement("td");
+    td.textContent = dado;
+    td.classList.add(classe);
+
+    return td;
+}
+
+function obtemPacienteDoFormulario(form) {
+
+    var paciente = {
+        nome: form.nome.value,
+        peso: form.peso.value,
+        altura: form.altura.value,
+        gordura: form.gordura.value,
+        imc: calculaImc(form.peso.value, form.altura.value)
+    }
+    return paciente;
+}
